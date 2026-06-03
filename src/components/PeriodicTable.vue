@@ -31,9 +31,11 @@ const STATIC_STYLE = Object.freeze(
       top: `${(el.row - 1) * (cellSize + gap)}px`,
       width: `${cellSize}px`,
       height: `${cellSize}px`,
-      background: `linear-gradient(135deg, ${c}26, ${c}10)`,
-      borderColor: `${c}80`,
-      color: c
+      // Warm parchment tint + category-colored bottom shadow (3D press)
+      background: `linear-gradient(180deg, #fffdf5 0%, ${c}1f 100%)`,
+      borderColor: `${c}cc`,
+      color: c,
+      '--cell-shadow': `${c}aa`
     })]
   }))
 )
@@ -114,7 +116,7 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   <div class="periodic-wrap">
     <header class="header">
       <div class="logo-mark">⚛</div>
-      <div>
+      <div class="title-wrap">
         <h1>3D Periodic Table</h1>
         <p class="sub">Click any element to dive into its atomic structure</p>
       </div>
@@ -178,48 +180,50 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
 .header {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   margin-bottom: 24px;
   text-align: left;
 }
 
 .logo-mark {
-  font-size: 36px;
-  width: 56px;
-  height: 56px;
+  font-size: 32px;
+  width: 64px;
+  height: 64px;
   display: grid;
   place-items: center;
-  border-radius: 16px;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(47,123,255,0.12), rgba(123,61,245,0.10));
-  border: 1px solid var(--border);
+  /* Organic blob radius */
+  border-radius: 40px 35px 45px 38px / 38px 45px 35px 40px;
+  color: #fff;
+  background: linear-gradient(140deg, var(--accent) 0%, var(--accent-active) 100%);
+  border: 3px solid #fff;
+  box-shadow: var(--shadow-press), 0 0 0 2px var(--accent-active);
 }
 
-.header h1 {
+.title-wrap h1 {
   margin: 0;
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  background: linear-gradient(90deg, #1a1d29, #7b3df5);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: 'Zen Maru Gothic', 'Nunito', sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: var(--text-head);
+  text-shadow: 0 2px 0 #fff, 0 3px 0 rgba(121, 79, 39, 0.18);
 }
 
 .sub {
   margin: 2px 0 0;
   color: var(--text-dim);
   font-size: 13px;
+  font-weight: 600;
 }
 
 .table-frame {
   position: relative;
-  padding: 20px;
-  border-radius: 24px;
-  background: rgba(255,255,255,0.7);
-  border: 1px solid var(--border);
-  box-shadow: 0 12px 40px rgba(20, 30, 60, 0.06);
-  backdrop-filter: blur(8px);
+  padding: 22px;
+  /* Slight organic radius — softer than perfect roundrect */
+  border-radius: 36px 32px 38px 34px / 34px 38px 32px 36px;
+  background: var(--bg-1);
+  border: 3px solid var(--border);
+  box-shadow: var(--shadow-card), 0 6px 0 0 rgba(189, 174, 160, 0.5);
 }
 
 .table {
@@ -228,57 +232,66 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
 
 .cell {
   position: absolute;
-  border: 1px solid;
-  border-radius: 8px;
+  border: 2px solid;
+  /* Friendly rounded — not pill (too wide for a 62px cell), but warm */
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 4px 2px;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
   cursor: pointer;
   user-select: none;
-  /* GPU compositor hints. translateZ(0) forces own layer so transform/opacity
-     animate without touching layout. `contain` keeps paint inside the cell. */
+  background-clip: padding-box;
+  /* 3D press shadow — depth = 4px in compact cell */
+  box-shadow: 0 4px 0 0 var(--cell-shadow, #bdaea0);
   transform: translateZ(0);
   backface-visibility: hidden;
   contain: layout style paint;
 }
 
 .cell.scattering {
-  /* During the scatter animation: promote layers + skip pointer hit-testing
-     to stop hover/click work from invalidating the running transition. */
   will-change: transform, opacity;
   pointer-events: none;
 }
 
 .cell:hover {
-  filter: saturate(1.2) brightness(0.95);
-  box-shadow: 0 6px 20px -4px currentColor;
+  filter: saturate(1.15) brightness(1.02);
+  box-shadow: 0 6px 0 0 var(--cell-shadow, #bdaea0);
   z-index: 2;
+}
+
+.cell:active {
+  /* Nintendo button press */
+  box-shadow: 0 1px 0 0 var(--cell-shadow, #bdaea0) !important;
 }
 
 .cell .z {
   font-size: 9px;
-  opacity: 0.85;
+  font-weight: 700;
+  opacity: 0.95;
   align-self: flex-start;
   padding-left: 4px;
   line-height: 1;
 }
 
 .cell .sym {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0;
   margin-top: 2px;
-  color: var(--text);
+  color: var(--text-head);
+  font-family: 'Zen Maru Gothic', 'Nunito', sans-serif;
 }
 
 .cell .mass {
   font-size: 8px;
-  opacity: 0.75;
+  opacity: 0.85;
   margin-top: 2px;
-  font-weight: 400;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .tooltip {
@@ -289,23 +302,26 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   display: flex;
   gap: 10px;
   align-items: center;
-  padding: 8px 16px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 100px;
+  padding: 10px 20px;
+  background: var(--bg-1);
+  border: 2.5px solid var(--border);
+  border-radius: var(--r-pill);
   font-size: 13px;
+  font-weight: 600;
   color: var(--text);
   white-space: nowrap;
   pointer-events: none;
-  box-shadow: 0 4px 16px rgba(20, 30, 60, 0.08);
+  box-shadow: var(--shadow-press);
 }
 
-.tooltip strong { font-weight: 600; }
+.tooltip strong { font-weight: 700; color: var(--text-head); }
 
 .cat-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -314,26 +330,34 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 
 .legend {
-  margin-top: 20px;
+  margin-top: 22px;
   display: flex;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 900px;
+  max-width: 920px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 6px 12px;
   font-size: 11px;
-  color: var(--text-dim);
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg-1);
+  border: 2px solid var(--border);
+  border-radius: var(--r-pill);
+  box-shadow: 0 2px 0 0 #d4c9b4;
 }
 
 .legend-item .dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--c);
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.12);
 }
 </style>

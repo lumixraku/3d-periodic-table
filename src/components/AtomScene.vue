@@ -22,7 +22,7 @@ const accent = computed(() => CATEGORY_COLORS[props.element.category] ?? '#6ec8f
 <template>
   <div class="atom-scene">
     <TresCanvas
-      clear-color="#ffffff"
+      clear-color="#f7f3df"
       :antialias="true"
       window-size
     >

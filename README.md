@@ -4,7 +4,8 @@ Interactive 3D periodic table built with **Vite + Vue 3 + [TresJS](https://tresj
 Click any element to scatter the table and dive into a Bohr-model atom; click a
 compound to see its molecular structure as a ball-and-stick model.
 
-Inspired by [@DilumSanjaya's element-explorer demo](https://x.com/DilumSanjaya/status/2061490330361589849).
+- Interaction inspired by [@DilumSanjaya's element-explorer demo](https://x.com/DilumSanjaya/status/2061490330361589849).
+- Visual style — warm parchment palette, organic shapes, and the *Nintendo button press* depth — inspired by [`animal-island-vue`](https://github.com/guokaigdg/animal-island-vue) (Animal Crossing-style Vue UI kit).
 
 ---
 
@@ -47,6 +48,7 @@ Then open <http://localhost:5173/>.
 - **TresJS** (`@tresjs/core`, `@tresjs/cientos`) for declarative Three.js
 - **three.js** for 3D math / renderer
 - Pure-CSS scatter animation for the table → atom transition
+- Animal Crossing-inspired design system: warm parchment background, pill / organic-blob radii, 3D press shadows, mint teal + yellow focus accents, Nunito + Zen Maru Gothic via `@fontsource`
 
 ## Project layout
 

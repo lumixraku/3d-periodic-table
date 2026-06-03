@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/nunito": "^5.2.7",
+    "@fontsource/zen-maru-gothic": "^5.2.8",
     "@tresjs/cientos": "^5.7.2",
     "@tresjs/core": "^5.8.1",
     "gsap": "^3.15.0",

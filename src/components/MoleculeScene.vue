@@ -87,7 +87,7 @@ const cameraDistance = computed(() => {
 <template>
   <div class="molecule-scene">
     <TresCanvas
-      clear-color="#ffffff"
+      clear-color="#f7f3df"
       :antialias="true"
       window-size
     >
