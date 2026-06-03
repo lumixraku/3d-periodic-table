@@ -11,6 +11,8 @@ compound to see its molecular structure as a ball-and-stick model.
 - Interaction inspired by [@DilumSanjaya's element-explorer demo](https://x.com/DilumSanjaya/status/2061490330361589849).
 - Visual style — warm parchment palette, organic shapes, and the *Nintendo button press* depth — inspired by [`animal-island-vue`](https://github.com/guokaigdg/animal-island-vue) (Animal Crossing-style Vue UI kit).
 
+![Demo: table → atom → molecule](docs/screenshots/demo.gif)
+
 ---
 
 ## Periodic Table
