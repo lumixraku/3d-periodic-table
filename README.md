@@ -1,5 +1,7 @@
 # 3D Periodic Table
 
+**Live demo →** <https://3d-periodic-table-liart.vercel.app>
+
 Interactive 3D periodic table built with **Vite + Vue 3 + [TresJS](https://tresjs.org/)**.
 Click any element to scatter the table and dive into a Bohr-model atom; click a
 compound to see its molecular structure as a ball-and-stick model.
