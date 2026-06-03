@@ -1,7 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useLoop } from '@tresjs/core'
-import { Euler, Vector3 } from 'three'
+import { Euler } from 'three'
 
 const props = defineProps({
   radius: { type: Number, required: true },
@@ -20,25 +20,20 @@ const orbitTilt = computed(() => {
   )
 })
 
-const electronAngles = ref(
-  Array.from({ length: props.count }, (_, i) => (i / props.count) * Math.PI * 2)
-)
+const angles = Array.from({ length: props.count }, (_, i) => (i / props.count) * Math.PI * 2)
+const electronRefs = ref([])
+const speed = 0.4 + 0.6 / (props.shellIndex + 1)
 
-const electronPositions = ref(
-  electronAngles.value.map(a => new Vector3(Math.cos(a) * props.radius, 0, Math.sin(a) * props.radius))
-)
-
-const speed = 0.5 / (props.shellIndex + 1)
 const { onBeforeRender } = useLoop()
 onBeforeRender(({ delta }) => {
+  const meshes = electronRefs.value
   for (let i = 0; i < props.count; i++) {
-    electronAngles.value[i] += delta * speed
-    const a = electronAngles.value[i]
-    electronPositions.value[i].set(
-      Math.cos(a) * props.radius,
-      0,
-      Math.sin(a) * props.radius
-    )
+    angles[i] += delta * speed
+    const a = angles[i]
+    const m = meshes[i]
+    if (m && m.position) {
+      m.position.set(Math.cos(a) * props.radius, 0, Math.sin(a) * props.radius)
+    }
   }
 })
 </script>
@@ -52,9 +47,9 @@ onBeforeRender(({ delta }) => {
     </TresMesh>
     <!-- Electrons -->
     <TresMesh
-      v-for="(p, i) in electronPositions"
+      v-for="i in count"
       :key="i"
-      :position="p"
+      :ref="el => { if (el) electronRefs[i - 1] = el }"
     >
       <TresSphereGeometry :args="[0.18, 16, 16]" />
       <TresMeshStandardMaterial
