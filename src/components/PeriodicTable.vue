@@ -86,7 +86,7 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
     <header class="header">
       <div class="logo-mark">⚛</div>
       <div>
-        <h1>Element Explorer</h1>
+        <h1>3D Periodic Table</h1>
         <p class="sub">Click any element to dive into its atomic structure</p>
       </div>
     </header>

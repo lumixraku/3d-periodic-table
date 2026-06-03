@@ -1,4 +1,4 @@
-# Element Explorer
+# 3D Periodic Table
 
 Interactive 3D periodic table built with **Vite + Vue 3 + [TresJS](https://tresjs.org/)**.
 Click any element to scatter the table and dive into a Bohr-model atom; click a
@@ -13,7 +13,7 @@ Inspired by [@DilumSanjaya's element-explorer demo](https://x.com/DilumSanjaya/s
 The entry view — 94 elements colored by category, with hover tooltips, a clean
 light theme, and a radial-scatter transition when an element is selected.
 
-![Periodic table view](docs/screenshots/periodic-table.png)
+![Periodic table view](docs/screenshots/periodic-table.jpg)
 
 ## Atomic Structure
 
@@ -21,14 +21,14 @@ A Bohr-model atom: red protons + blue neutrons packed into a nucleus, with
 electrons orbiting along 3D-tilted shells. The HUD shows atomic data and a list
 of common compounds for that element.
 
-![Atomic structure view](docs/screenshots/atom-view.png)
+![Atomic structure view](docs/screenshots/atom-view.jpg)
 
 ## Compound / Molecule
 
 Ball-and-stick rendering with CPK-style colors and per-bond cylinders (double
 and triple bonds are drawn as parallel cylinders).
 
-![Molecule view](docs/screenshots/molecule-view.png)
+![Molecule view](docs/screenshots/molecule-view.jpg)
 
 ---
 
