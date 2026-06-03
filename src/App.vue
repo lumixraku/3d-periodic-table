@@ -1,11 +1,27 @@
 <script setup>
-import { ref, computed, defineAsyncComponent } from 'vue'
+import { ref, computed, defineAsyncComponent, onMounted } from 'vue'
 import PeriodicTable from './components/PeriodicTable.vue'
 import { CATEGORY_COLORS, CATEGORY_LABELS } from './data/elements.js'
 import { COMPOUNDS } from './data/compounds.js'
 
+// Lazy-load 3D scenes so they don't bloat the initial bundle, but eagerly
+// kick off the chunk download right after mount. By the time the user clicks
+// an element ~seconds later, the chunks + their TresJS / Three.js deps are
+// already parsed, so the scatter animation doesn't compete with module init.
 const AtomScene = defineAsyncComponent(() => import('./components/AtomScene.vue'))
 const MoleculeScene = defineAsyncComponent(() => import('./components/MoleculeScene.vue'))
+
+function preloadScenes() {
+  // requestIdleCallback (fallback: setTimeout) keeps preloading off the
+  // critical path of the initial paint.
+  const run = () => {
+    import('./components/AtomScene.vue').catch(() => {})
+    import('./components/MoleculeScene.vue').catch(() => {})
+  }
+  if (typeof requestIdleCallback === 'function') requestIdleCallback(run, { timeout: 800 })
+  else setTimeout(run, 200)
+}
+onMounted(preloadScenes)
 
 // view: 'table' | 'atom' | 'molecule'
 const view = ref('table')

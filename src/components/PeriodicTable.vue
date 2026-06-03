@@ -21,53 +21,82 @@ const gap = 4
 const tableWidth = COLS * cellSize + (COLS - 1) * gap
 const tableHeight = ROWS * cellSize + (ROWS - 1) * gap
 
-function cellStyle(el) {
-  const x = (el.col - 1) * (cellSize + gap)
-  const y = (el.row - 1) * (cellSize + gap)
-  const c = CATEGORY_COLORS[el.category]
-  return {
-    left: `${x}px`,
-    top: `${y}px`,
-    width: `${cellSize}px`,
-    height: `${cellSize}px`,
-    background: `linear-gradient(135deg, ${c}26, ${c}10)`,
-    borderColor: `${c}80`,
-    color: c
-  }
-}
+// Static per-cell style computed once at module scope (positions, colors —
+// nothing reactive). Avoids allocating fresh style objects every render.
+const STATIC_STYLE = Object.freeze(
+  Object.fromEntries(ELEMENTS.map(el => {
+    const c = CATEGORY_COLORS[el.category]
+    return [el.symbol, Object.freeze({
+      left: `${(el.col - 1) * (cellSize + gap)}px`,
+      top: `${(el.row - 1) * (cellSize + gap)}px`,
+      width: `${cellSize}px`,
+      height: `${cellSize}px`,
+      background: `linear-gradient(135deg, ${c}26, ${c}10)`,
+      borderColor: `${c}80`,
+      color: c
+    })]
+  }))
+)
 
-function scatterDelta(el) {
-  if (!props.scattering || !props.scatterOrigin) return { tx: 0, ty: 0, rot: 0, scale: 1, op: 1, delay: 0 }
-  // Compute vector from origin cell to this cell
-  const dr = el.row - props.scatterOrigin.row
-  const dc = el.col - props.scatterOrigin.col
-  const dist = Math.hypot(dr, dc)
-  if (el.symbol === props.selectedSymbol) {
-    // Target element: scale up and fade out
-    return { tx: 0, ty: 0, rot: 0, scale: 2.6, op: 0, delay: 0 }
+// Cached, deterministic scatter end-state per element. Recomputed only when
+// `scattering` or `scatterOrigin` change — *not* on hover or any other
+// reactive update, so the CSS transition target stays stable for its full
+// duration. Rotation is seeded by atomic number for stability.
+const scatterMap = computed(() => {
+  if (!props.scattering || !props.scatterOrigin) return null
+  const origin = props.scatterOrigin
+  const sel = props.selectedSymbol
+  const m = new Map()
+  for (const el of ELEMENTS) {
+    if (el.symbol === sel) {
+      m.set(el.symbol, { tx: 0, ty: 0, rot: 0, scale: 2.6, op: 0, delay: 0 })
+      continue
+    }
+    const dr = el.row - origin.row
+    const dc = el.col - origin.col
+    const dist = Math.hypot(dr, dc) || 1
+    const PUSH = 700
+    let vx = (dc / dist) * PUSH
+    let vy = (dr / dist) * PUSH
+    const swirl = 60
+    vx += -dr / dist * swirl
+    vy +=  dc / dist * swirl
+    // Deterministic rotation from atomic number
+    const seed = (el.z * 2654435761) >>> 0
+    const rot = ((seed % 240) / 240 - 0.5) * 120
+    const delay = Math.min(dist * 12, 180)
+    m.set(el.symbol, { tx: vx, ty: vy, rot, scale: 0.6, op: 0, delay })
   }
-  // Push outward; closer cells get less push, distant cells more
-  const PUSH = 700
-  let vx = dr === 0 && dc === 0 ? 0 : (dc / (dist || 1)) * PUSH
-  let vy = dr === 0 && dc === 0 ? 0 : (dr / (dist || 1)) * PUSH
-  // Add a tiny tangential swirl
-  const swirl = 60
-  vx += -dr / (dist || 1) * swirl
-  vy +=  dc / (dist || 1) * swirl
-  const rot = (Math.random() - 0.5) * 120
-  // Stagger: closer cells leave first
-  const delay = Math.min(dist * 12, 180)
-  return { tx: vx, ty: vy, rot, scale: 0.6, op: 0, delay }
-}
+  return m
+})
 
-function cellTransform(el) {
-  const d = scatterDelta(el)
-  return {
-    transform: `translate(${d.tx}px, ${d.ty}px) rotate(${d.rot}deg) scale(${d.scale})`,
-    opacity: d.op,
-    transition: `transform 0.75s cubic-bezier(0.6, -0.05, 0.3, 1.2) ${d.delay}ms, opacity 0.55s ease-out ${d.delay}ms`
+const REST_TRANSFORM = Object.freeze({
+  transform: 'translate3d(0,0,0)',
+  opacity: 1,
+  transition: 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-out'
+})
+
+// Combined style map: static layout/color + current scatter transform.
+// Rebuilt only when scattering state flips (computed deps), not per render.
+const styleMap = computed(() => {
+  const sm = scatterMap.value
+  const out = new Map()
+  for (const el of ELEMENTS) {
+    const base = STATIC_STYLE[el.symbol]
+    if (!sm) {
+      out.set(el.symbol, { ...base, ...REST_TRANSFORM })
+    } else {
+      const d = sm.get(el.symbol)
+      out.set(el.symbol, {
+        ...base,
+        transform: `translate3d(${d.tx}px, ${d.ty}px, 0) rotate(${d.rot}deg) scale(${d.scale})`,
+        opacity: d.op,
+        transition: `transform 0.75s cubic-bezier(0.6, -0.05, 0.3, 1.2) ${d.delay}ms, opacity 0.55s ease-out ${d.delay}ms`
+      })
+    }
   }
-}
+  return out
+})
 
 const tooltip = computed(() => {
   if (!hovered.value) return null
@@ -100,11 +129,11 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
           v-for="el in ELEMENTS"
           :key="el.symbol"
           class="cell"
-          :class="{ hovered: hovered === el }"
-          :style="{ ...cellStyle(el), ...cellTransform(el) }"
-          @mouseenter="hovered = el"
+          :class="{ scattering }"
+          :style="styleMap.get(el.symbol)"
+          @mouseenter="!scattering && (hovered = el)"
           @mouseleave="hovered = null"
-          @click="emit('select', el)"
+          @click="!scattering && emit('select', el)"
         >
           <span class="z">{{ el.z }}</span>
           <span class="sym">{{ el.symbol }}</span>
@@ -207,9 +236,20 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   justify-content: center;
   padding: 4px 2px;
   font-weight: 600;
-  will-change: transform;
   cursor: pointer;
   user-select: none;
+  /* GPU compositor hints. translateZ(0) forces own layer so transform/opacity
+     animate without touching layout. `contain` keeps paint inside the cell. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+}
+
+.cell.scattering {
+  /* During the scatter animation: promote layers + skip pointer hit-testing
+     to stop hover/click work from invalidating the running transition. */
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .cell:hover {
