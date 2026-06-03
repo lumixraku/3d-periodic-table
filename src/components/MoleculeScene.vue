@@ -87,8 +87,7 @@ const cameraDistance = computed(() => {
 <template>
   <div class="molecule-scene">
     <TresCanvas
-      clear-color="#000000"
-      :alpha="true"
+      clear-color="#ffffff"
       :antialias="true"
       window-size
     >
@@ -101,9 +100,9 @@ const cameraDistance = computed(() => {
         :auto-rotate-speed="0.6"
       />
 
-      <TresAmbientLight :intensity="0.55" />
+      <TresAmbientLight :intensity="0.85" />
       <TresDirectionalLight :position="[8, 10, 6]" :intensity="0.9" />
-      <TresPointLight :position="[-6, -4, -6]" :intensity="0.4" :color="'#b388ff'" />
+      <TresDirectionalLight :position="[-6, -4, -6]" :intensity="0.35" />
 
       <!-- Atoms -->
       <TresMesh
@@ -115,9 +114,7 @@ const cameraDistance = computed(() => {
         <TresMeshStandardMaterial
           :color="a.color"
           :roughness="0.35"
-          :metalness="0.15"
-          :emissive="a.color"
-          :emissive-intensity="0.08"
+          :metalness="0.1"
         />
       </TresMesh>
 
@@ -130,9 +127,9 @@ const cameraDistance = computed(() => {
       >
         <TresCylinderGeometry :args="[0.085, 0.085, b.length, 16]" />
         <TresMeshStandardMaterial
-          color="#9aa0b2"
-          :roughness="0.5"
-          :metalness="0.2"
+          color="#6e7488"
+          :roughness="0.55"
+          :metalness="0.15"
         />
       </TresMesh>
     </TresCanvas>

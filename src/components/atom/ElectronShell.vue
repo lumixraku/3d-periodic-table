@@ -48,7 +48,7 @@ onBeforeRender(({ delta }) => {
     <!-- Orbit ring -->
     <TresMesh :rotation="[Math.PI / 2, 0, 0]">
       <TresTorusGeometry :args="[radius, 0.012, 8, 96]" />
-      <TresMeshBasicMaterial :color="color" :transparent="true" :opacity="0.35" />
+      <TresMeshBasicMaterial :color="'#1a1d29'" :transparent="true" :opacity="0.18" />
     </TresMesh>
     <!-- Electrons -->
     <TresMesh
@@ -56,12 +56,11 @@ onBeforeRender(({ delta }) => {
       :key="i"
       :position="p"
     >
-      <TresSphereGeometry :args="[0.18, 12, 12]" />
+      <TresSphereGeometry :args="[0.18, 16, 16]" />
       <TresMeshStandardMaterial
         :color="color"
-        :emissive="color"
-        :emissive-intensity="1.6"
-        :roughness="0.2"
+        :roughness="0.3"
+        :metalness="0.15"
       />
     </TresMesh>
   </TresGroup>

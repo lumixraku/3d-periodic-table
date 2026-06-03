@@ -1,11 +1,14 @@
 :root {
-  --bg-0: #0a0e1a;
-  --bg-1: #0e1424;
-  --bg-2: #131b30;
-  --text: #e9ecf3;
-  --text-dim: #8d97b0;
-  --accent: #6ec8ff;
-  --accent-2: #b388ff;
+  color-scheme: light only;
+
+  --bg-0: #ffffff;
+  --bg-1: #f6f7fb;
+  --bg-2: #eef0f6;
+  --text: #1a1d29;
+  --text-dim: #6b7385;
+  --border: #e3e6ee;
+  --accent: #2f7bff;
+  --accent-2: #7b3df5;
 
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;
   font-synthesis: none;
@@ -27,8 +30,8 @@ html, body, #app {
 
 body {
   background:
-    radial-gradient(1200px 800px at 70% -10%, rgba(110, 200, 255, 0.10), transparent 60%),
-    radial-gradient(1000px 700px at -10% 110%, rgba(179, 136, 255, 0.10), transparent 60%),
+    radial-gradient(1200px 800px at 70% -10%, rgba(47, 123, 255, 0.07), transparent 60%),
+    radial-gradient(1000px 700px at -10% 110%, rgba(123, 61, 245, 0.06), transparent 60%),
     var(--bg-0);
 }
 

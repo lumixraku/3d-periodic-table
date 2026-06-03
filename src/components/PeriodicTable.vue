@@ -24,14 +24,15 @@ const tableHeight = ROWS * cellSize + (ROWS - 1) * gap
 function cellStyle(el) {
   const x = (el.col - 1) * (cellSize + gap)
   const y = (el.row - 1) * (cellSize + gap)
+  const c = CATEGORY_COLORS[el.category]
   return {
     left: `${x}px`,
     top: `${y}px`,
     width: `${cellSize}px`,
     height: `${cellSize}px`,
-    background: `linear-gradient(135deg, ${CATEGORY_COLORS[el.category]}30, ${CATEGORY_COLORS[el.category]}10)`,
-    borderColor: `${CATEGORY_COLORS[el.category]}60`,
-    color: CATEGORY_COLORS[el.category]
+    background: `linear-gradient(135deg, ${c}26, ${c}10)`,
+    borderColor: `${c}80`,
+    color: c
   }
 }
 
@@ -160,8 +161,9 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   display: grid;
   place-items: center;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(110,200,255,0.25), rgba(179,136,255,0.2));
-  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(47,123,255,0.12), rgba(123,61,245,0.10));
+  border: 1px solid var(--border);
 }
 
 .header h1 {
@@ -169,8 +171,7 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   font-size: 26px;
   font-weight: 600;
   letter-spacing: -0.5px;
-  color: var(--text);
-  background: linear-gradient(90deg, #fff, #b388ff);
+  background: linear-gradient(90deg, #1a1d29, #7b3df5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -186,8 +187,9 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   position: relative;
   padding: 20px;
   border-radius: 24px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(20, 30, 60, 0.06);
   backdrop-filter: blur(8px);
 }
 
@@ -208,18 +210,17 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   will-change: transform;
   cursor: pointer;
   user-select: none;
-  backdrop-filter: blur(4px);
 }
 
 .cell:hover {
-  filter: brightness(1.35);
-  box-shadow: 0 0 24px currentColor;
+  filter: saturate(1.2) brightness(0.95);
+  box-shadow: 0 6px 20px -4px currentColor;
   z-index: 2;
 }
 
 .cell .z {
   font-size: 9px;
-  opacity: 0.8;
+  opacity: 0.85;
   align-self: flex-start;
   padding-left: 4px;
   line-height: 1;
@@ -230,13 +231,12 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   font-weight: 700;
   letter-spacing: -0.5px;
   margin-top: 2px;
-  color: #fff;
-  text-shadow: 0 0 8px currentColor;
+  color: var(--text);
 }
 
 .cell .mass {
   font-size: 8px;
-  opacity: 0.7;
+  opacity: 0.75;
   margin-top: 2px;
   font-weight: 400;
 }
@@ -250,13 +250,14 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   gap: 10px;
   align-items: center;
   padding: 8px 16px;
-  background: rgba(20, 27, 48, 0.9);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #fff;
+  border: 1px solid var(--border);
   border-radius: 100px;
   font-size: 13px;
   color: var(--text);
   white-space: nowrap;
   pointer-events: none;
+  box-shadow: 0 4px 16px rgba(20, 30, 60, 0.08);
 }
 
 .tooltip strong { font-weight: 600; }
@@ -294,6 +295,5 @@ const legendCats = ['alkali','alkaline','transition','post-transition','metalloi
   height: 8px;
   border-radius: 50%;
   background: var(--c);
-  box-shadow: 0 0 8px var(--c);
 }
 </style>

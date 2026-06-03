@@ -142,18 +142,18 @@ export const ELEMENTS = [
 export const ELEMENT_BY_SYMBOL = Object.fromEntries(ELEMENTS.map(e => [e.symbol, e]))
 export const ELEMENT_BY_Z = Object.fromEntries(ELEMENTS.map(e => [e.z, e]))
 
-// CPK-ish element colors for molecule rendering.
+// CPK-ish element colors for molecule rendering — tuned for a light background.
 export const ELEMENT_COLORS = {
-  H: '#ffffff',
-  C: '#222831',
-  N: '#3b6cff',
-  O: '#ff4d4d',
-  F: '#3acf2c',
-  Cl: '#3acf2c',
-  Br: '#a52a2a',
-  I:  '#8b3aa3',
-  S:  '#f1c40f',
-  P:  '#ff8c00',
-  Na: '#9b59b6',
-  Si: '#daa520'
+  H: '#d6dae4',
+  C: '#2a2f3a',
+  N: '#3361d6',
+  O: '#e63946',
+  F: '#2cae2c',
+  Cl: '#2cae2c',
+  Br: '#9b3a3a',
+  I:  '#7a2f9c',
+  S:  '#e0b020',
+  P:  '#f08a1c',
+  Na: '#8e4cd6',
+  Si: '#b8861f'
 }

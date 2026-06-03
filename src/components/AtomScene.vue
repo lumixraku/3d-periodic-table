@@ -22,8 +22,7 @@ const accent = computed(() => CATEGORY_COLORS[props.element.category] ?? '#6ec8f
 <template>
   <div class="atom-scene">
     <TresCanvas
-      clear-color="#000000"
-      :alpha="true"
+      clear-color="#ffffff"
       :antialias="true"
       window-size
     >
@@ -36,9 +35,9 @@ const accent = computed(() => CATEGORY_COLORS[props.element.category] ?? '#6ec8f
         :auto-rotate-speed="0.4"
       />
 
-      <TresAmbientLight :intensity="0.5" />
-      <TresPointLight :position="[0, 0, 0]" :intensity="1.2" :color="accent" :distance="15" />
-      <TresDirectionalLight :position="[10, 10, 10]" :intensity="0.8" />
+      <TresAmbientLight :intensity="0.85" />
+      <TresDirectionalLight :position="[10, 10, 10]" :intensity="0.9" />
+      <TresDirectionalLight :position="[-6, -4, -6]" :intensity="0.35" />
 
       <Nucleus
         :proton-count="element.z"

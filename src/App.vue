@@ -206,16 +206,18 @@ const currentCompound = computed(() =>
   gap: 8px;
   padding: 10px 16px;
   border-radius: 100px;
-  background: rgba(20, 27, 48, 0.7);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
   color: var(--text);
   font-size: 14px;
   backdrop-filter: blur(8px);
-  transition: background 0.2s, border-color 0.2s;
+  box-shadow: 0 4px 16px rgba(20, 30, 60, 0.06);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
 }
 .back:hover {
-  background: rgba(30, 40, 70, 0.9);
+  background: #fff;
   border-color: var(--accent);
+  transform: translateX(-2px);
 }
 .arrow { font-size: 16px; line-height: 1; }
 
@@ -224,12 +226,12 @@ const currentCompound = computed(() =>
   top: 20px;
   right: 20px;
   width: 300px;
-  background: rgba(14, 20, 36, 0.78);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
   border-radius: 18px;
   backdrop-filter: blur(12px);
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 12px 40px rgba(20, 30, 60, 0.08);
 }
 
 .info-head {
@@ -239,7 +241,7 @@ const currentCompound = computed(() =>
   padding: 18px 16px 14px;
   gap: 4px 12px;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--border);
 }
 
 .z-num {
@@ -247,10 +249,10 @@ const currentCompound = computed(() =>
   text-align: center;
   font-size: 12px;
   color: var(--text-dim);
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 4px 0 8px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(0, 0, 0, 0.02);
   font-weight: 600;
 }
 .symbol {
@@ -258,19 +260,18 @@ const currentCompound = computed(() =>
   font-weight: 700;
   letter-spacing: -1px;
   line-height: 1;
-  color: #fff;
-  text-shadow: 0 0 12px var(--accent);
+  color: var(--accent);
   grid-column: 1;
   margin-top: -6px;
   text-align: center;
 }
 .meta { grid-column: 2; grid-row: 1 / span 2; }
-.name { font-weight: 600; font-size: 18px; color: #fff; }
+.name { font-weight: 600; font-size: 18px; color: var(--text); }
 .cat { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
 
 .rows {
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--border);
 }
 .row {
   display: flex;
@@ -279,7 +280,7 @@ const currentCompound = computed(() =>
   font-size: 13px;
 }
 .row span { color: var(--text-dim); }
-.row b { color: var(--text); font-weight: 500; }
+.row b { color: var(--text); font-weight: 600; }
 
 .compounds {
   padding: 14px 16px 16px;
@@ -300,7 +301,7 @@ const currentCompound = computed(() =>
   align-items: center;
   padding: 9px 12px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(0, 0, 0, 0.025);
   border: 1px solid transparent;
   font-size: 13px;
   color: var(--text);
@@ -308,12 +309,12 @@ const currentCompound = computed(() =>
   transition: background 0.2s, border-color 0.2s, transform 0.15s;
 }
 .compound-btn:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(47, 123, 255, 0.06);
   border-color: var(--accent);
   transform: translateX(2px);
 }
 .compound-btn.active {
-  background: rgba(110, 200, 255, 0.12);
+  background: rgba(47, 123, 255, 0.10);
   border-color: var(--accent);
 }
 .formula { font-weight: 600; }
@@ -334,19 +335,19 @@ const currentCompound = computed(() =>
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(20, 27, 48, 0.7);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
   border-radius: 100px;
   font-size: 12px;
   color: var(--text-dim);
   backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(20, 30, 60, 0.06);
 }
 .view-tag .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
   animation: pulse 1.6s ease-in-out infinite;
 }
 @keyframes pulse {

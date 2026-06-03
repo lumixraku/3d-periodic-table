@@ -58,11 +58,9 @@ const nucleons = computed(() => {
       <TresMesh :position="n.pos">
         <TresSphereGeometry :args="[0.28, 16, 16]" />
         <TresMeshStandardMaterial
-          :color="n.isProton ? '#ff4d4d' : '#3b6cff'"
-          :emissive="n.isProton ? '#a52020' : '#1c308a'"
-          :emissive-intensity="0.35"
-          :roughness="0.45"
-          :metalness="0.1"
+          :color="n.isProton ? '#e94747' : '#2f6cf2'"
+          :roughness="0.4"
+          :metalness="0.05"
         />
       </TresMesh>
     </template>
